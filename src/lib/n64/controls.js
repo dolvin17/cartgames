@@ -33,12 +33,12 @@ export class InputController {
 
   defaultKeymappings() {
     return {
-      Mapping_Left: "b",
-      Mapping_Right: "n",
-      Mapping_Up: "y",
-      Mapping_Down: "h",
-      Mapping_Action_A: "d",
-      Mapping_Action_B: "s",
+      Mapping_Left: "f",
+      Mapping_Right: "h",
+      Mapping_Up: "t",
+      Mapping_Down: "g",
+      Mapping_Action_A: "x",
+      Mapping_Action_B: "c",
       Mapping_Action_Start: "Enter",
       Mapping_Action_CUP: "i",
       Mapping_Action_CDOWN: "k",
@@ -48,9 +48,9 @@ export class InputController {
       Mapping_Action_Analog_Down: "ArrowDown",
       Mapping_Action_Analog_Left: "ArrowLeft",
       Mapping_Action_Analog_Right: "ArrowRight",
-      Mapping_Action_Z: "a",
-      Mapping_Action_L: "q",
-      Mapping_Action_R: "e",
+      Mapping_Action_Z: "z",
+      Mapping_Action_L: "a",
+      Mapping_Action_R: "s",
       Mapping_Menu: "`",
     }
   }
