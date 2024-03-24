@@ -72,7 +72,8 @@ const config: Config = {
   },
   daisyui: {
     themes: [
-		"synthwave",  {
+      "synthwave",
+      {
         mytheme: {
           primary: "#ff00cd",
           secondary: "#00d853",
