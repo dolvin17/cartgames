@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
 
 const config: Config = {
   content: [
@@ -15,9 +15,9 @@ const config: Config = {
       },
     },
     extend: {
-		fontFamily: {
-			sans: ['var(--press-start-2p)'],
-		  },
+      fontFamily: {
+        sans: ["var(--press-start-2p)"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -60,21 +60,20 @@ const config: Config = {
       },
       keyframes: {
         animatedgradient: {
-			'0%': { backgroundPosition: '0% 50%' },
-			'50%': { backgroundPosition: '100% 50%' },
-			'100%': { backgroundPosition: '0% 50%' },
-		},
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
       },
       animation: {
-        gradient: 'animatedgradient 6s ease infinite alternate',
+        gradient: "animatedgradient 6s ease infinite alternate",
       },
     },
   },
   daisyui: {
     themes: [
-		"cyberpunk",
+      "cyberpunk",
       {
-	
         mytheme: {
           primary: "#ff00cd",
           secondary: "#00d853",
@@ -90,5 +89,5 @@ const config: Config = {
     ],
   },
   plugins: [require("tailwindcss-animated"), require("daisyui")],
-};
-export default config;
+}
+export default config
