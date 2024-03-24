@@ -6,7 +6,7 @@ import { N64 } from "@/lib/n64"
 
 import asset_mk from "@/public/asset_mortal.png"
 import asset_sm from "@/public/asset_smash.png"
-import asset_zelda from "@/public/asset_zero.png"
+import asset_zelda from "@/public/asset_zelda.png"
 import asset_geye from "@/public/asset_zero.png"
 import asset_fzero from "@/public/asset_fzero.png"
 import asset_supermario from "@/public/asset_supermario.png"
@@ -15,10 +15,16 @@ import asset_jossy from "@/public/asset_jossy.png"
 
 export const ROMS = [
   {
-    url: "/roms/F-ZERO X.n64",
-    title: "F-ZERO X",
-    id: "fzerox",
-    cover: asset_fzero,
+    url: "/roms/MortalKombatTrilogy.z64",
+    title: "Mortal Kombat Trilogy",
+    id: "mk3",
+    cover: asset_mk,
+  },
+  {
+    url: "/roms/THE LEGEND OF ZELDA.n64",
+    title: "The Legend of Zelda: Ocarina of Time",
+    id: "tloz-oot",
+    cover: asset_zelda,
   },
   {
     url: "/roms/GOLDENEYE.z64",
@@ -33,10 +39,10 @@ export const ROMS = [
     cover: asset_kart,
   },
   {
-    url: "/roms/MortalKombatTrilogy.z64",
-    title: "Mortal Kombat Trilogy",
-    id: "mk3",
-    cover: asset_mk,
+    url: "/roms/F-ZERO X.n64",
+    title: "F-ZERO X",
+    id: "fzerox",
+    cover: asset_fzero,
   },
   {
     url: "/roms/SMASH BROTHERS.n64",
@@ -50,12 +56,7 @@ export const ROMS = [
     id: "mario64",
     cover: asset_supermario,
   },
-  {
-    url: "/roms/THE LEGEND OF ZELDA.n64",
-    title: "The Legend of Zelda: Ocarina of Time",
-    id: "tloz-oot",
-    cover: asset_zelda,
-  },
+
   {
     url: "/roms/YOSHI STORY.z64",
     title: "Yoshi’s Story",

@@ -11,7 +11,7 @@ export default function PlayPage({
 }: {
   params: { id: string }
 }) {
-  const [loading, setLoading] = useState(true)
+  const [isLoading, setLoading] = useState(true)
   const [isPlaying, setIsPlaying] = useState(false)
   const { initialized, play, getCover } = useRoms()
 
@@ -19,28 +19,38 @@ export default function PlayPage({
     clearTimeout(timer)
     timer = setTimeout(() => {
       setLoading(false)
-    }, 1500)
+    }, 900)
   }, [initialized])
 
   function handlePlayGame() {
-    if (loading || !initialized) return
-    play({ id }).then(() => setIsPlaying(true))
+    if (isLoading || !initialized || isPlaying) return
+
+    setLoading(true)
+    play({ id }).then(() => {
+      setTimeout(() => {
+        setIsPlaying(true)
+      }, 2900)
+    })
   }
 
   return (
-    <div
-      onClick={handlePlayGame}
-      className="relative cursor-pointer w-screen h-screen"
-    >
+    <div className="relative cursor-pointer w-screen h-screen">
       {isPlaying || (
-        <div className="bg-black/50 backdrop-blur-sm absolute inset-0 z-20 grid place-items-center">
+        <div
+          onClick={handlePlayGame}
+          className="bg-black/50 backdrop-blur-sm absolute inset-0 z-20 grid place-items-center"
+        >
           <strong className="text-white">
-            {loading ? "Loading..." : "Click to Play"}
+            {isLoading ? "Loading..." : "Click to Play"}
           </strong>
         </div>
       )}
 
-      <Canvas className="absolute top-0 w-full left-0 h-full z-10" />
+      <Canvas
+        className={`absolute top-0 w-full left-0 h-full z-10 ${
+          isPlaying || "opacity-0"
+        }`}
+      />
       <Image fill className="object-cover" alt="" src={getCover(id)} />
     </div>
   )
