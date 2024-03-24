@@ -29,10 +29,8 @@ export class N64 {
       audioSkipCount: 0,
       inputController: null,
       currKey: 0,
-      remappingPlayer1: false,
       romList: [],
       inputLoopStarted: false,
-      hadFullscreen: false,
     }
   }
 
@@ -243,7 +241,7 @@ export class N64 {
   }
 
   WriteConfigFile = () => {
-    let configString = "1\r\n".repeat(15)
+    let configString = "0\r\n".repeat(15)
 
     //keyboard
     configString +=
@@ -351,12 +349,16 @@ export class N64 {
 
   fullscreen = () => {
     try {
-      let el = document.getElementById("canvas")
+      if (document.fullscreenElement) {
+        return document.exitFullscreen()
+      }
 
-      //window["myApp"].rivetsData.hadFullscreen = true
+      const el = document.getElementById("gameContainer")
 
       if (el.webkitRequestFullScreen) {
         el.webkitRequestFullScreen()
+      } else if (el.requestFullScreen) {
+        el.requestFullScreen()
       } else {
         el.mozRequestFullScreen()
       }

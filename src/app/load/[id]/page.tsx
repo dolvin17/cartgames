@@ -1,12 +1,16 @@
 "use client"
 
-import Canvas from "@/components/Canvas"
-import { Fragment, useEffect, useState } from "react"
-import { useEmulator, useRoms } from "@/lib/utils/emu"
 import Image from "next/image"
+import { Fragment, useEffect, useState } from "react"
 import { useRkAccountModal } from "@/lib/wallet"
+import Canvas from "@/components/Canvas"
+
 import { useAccount } from "wagmi"
 import { toastDismiss, toastLoading } from "@/lib/toaster"
+import { SlSizeFullscreen } from "react-icons/sl"
+
+import { useRoms } from "@/lib/utils/emu"
+import { get } from "http"
 
 let timer: NodeJS.Timeout
 export default function PlayPage({
@@ -18,7 +22,7 @@ export default function PlayPage({
   const { openAccountModal } = useRkAccountModal()
   const [isLoading, setLoading] = useState(true)
   const [isPlaying, setIsPlaying] = useState(false)
-  const { initialized, play, getCover } = useRoms()
+  const { initialized, play, getCover, getInstance } = useRoms()
 
   useEffect(() => {
     clearTimeout(timer)
@@ -52,11 +56,15 @@ export default function PlayPage({
     // TODO: Save state on chain
   }
 
+  function handleFullscreen(e: any) {
+    getInstance()?.fullscreen()
+  }
+
   return (
-    <div className="relative cursor-pointer w-screen h-screen">
+    <main id="gameContainer" className="w-screen h-screen">
       {isPlaying ? (
         <Fragment>
-          <div className="absolute bg-black/5 py-4 px-5 rounded-3xl mt-4 ml-4 hover:bg-black/90 top-0 left-0 z-20 opacity-15 hover:opacity-25">
+          <div className="absolute p-3 cursor-pointer top-0 right-0 z-20 opacity-15 hover:opacity-35 select-none">
             <strong className="text-white text-sm">CONTROLS</strong>
             <ul className="text-white text-xs mt-2">
               <li>A,S</li>
@@ -66,17 +74,27 @@ export default function PlayPage({
             </ul>
           </div>
 
-          <button
-            onClick={handleSaveState}
-            className="absolute bg-black/50 py-4 px-5 text-xs rounded-full mb-4 ml-4 hover:bg-black/90 bottom-0 left-0 z-20 opacity-30 border-2 border-white/80 hover:opacity-50"
-          >
-            SAVE STATE
-          </button>
+          <nav className="absolute flex items-center gap-3 text-xs mb-7 ml-7 bottom-0 left-0 z-30">
+            <button
+              onClick={handleFullscreen}
+              className="bg-black/50 backdrop-blur-md py-4 group px-5 rounded-full border-white/80 hover:opacity-50 hover:bg-black/90 opacity-30 border-2"
+            >
+              <SlSizeFullscreen className="scale-125 group-hover:scale-[1.3]" />
+            </button>
+
+            <button
+              onClick={handleSaveState}
+              className="bg-black/50 backdrop-blur-md py-4 px-5 rounded-full border-white/80 hover:opacity-50 hover:bg-black/90 opacity-30 border-2"
+            >
+              SAVE STATE
+            </button>
+          </nav>
         </Fragment>
       ) : (
         <div
           onClick={handlePlayGame}
-          className="bg-black/50 backdrop-blur-sm absolute inset-0 z-20 grid place-items-center"
+          tabIndex={-1}
+          className="bg-black/50 cursor-pointer backdrop-blur-sm absolute inset-0 z-20 grid place-items-center"
         >
           <strong className="text-white">
             {isLoading ? "Loading..." : "Click to Play"}
@@ -85,11 +103,16 @@ export default function PlayPage({
       )}
 
       <Canvas
-        className={`absolute top-0 w-full left-0 h-full z-10 ${
+        className={`absolute pointer-events-none top-0 w-full left-0 h-full z-10 ${
           isPlaying || "opacity-0"
         }`}
       />
-      <Image fill className="object-cover" alt="" src={getCover(id)} />
-    </div>
+      <Image
+        fill
+        className="object-cover pointer-events-none"
+        alt=""
+        src={getCover(id)}
+      />
+    </main>
   )
 }
