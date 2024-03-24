@@ -8,7 +8,7 @@ export default function Profile() {
         <Image src="/asset_ship.svg" alt="" width={50} height={50} />
       </div>
       <div className="bg-lime-500 text-black items-center gap-8 p-32 flex flex-row">
-	  <div className="flex flex-col">
+	  <div className="flex flex-col rounded-xl p-4 hover-borde">
           <h2 className="text-yellow-900 text-2xl py-4 text-center">Mario Kart</h2>
 
           <div className="flex items-center flex-row gap-4 ">
@@ -45,7 +45,7 @@ export default function Profile() {
             <strong className="py-3">0h 23m 03s</strong>
           </div>
         </div>
-		<div className="flex flex-col">
+		<div className="flex flex-col  hover-borde p-4">
           <h2 className="text-yellow-900 text-2xl py-4 text-center">Super Mario</h2>
 
           <div className="flex items-center flex-row gap-4 ">

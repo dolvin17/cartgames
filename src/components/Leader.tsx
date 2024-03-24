@@ -11,7 +11,7 @@ export default function Leader() {
       <div className="bg-lime-500 text-black flex items-center gap-8 p-32">
         <div className="flex flex-col">
           <h2 className="text-red-500 text-2xl py-4 text-center">Player</h2>
-		  <div className="flex items-center flex-row rounded border-y-2">
+		  <div className="flex items-center flex-row rounded border-y-2 bg-cyan-200  animate-pulse">
 			<p className="text-red-500 text-center">#42</p>
             <Image
               className="animate-wiggle-more animate-infinite animate-delay-500 hover:animate-jump  animate-duration-[2000ms] animate-ease-in"
@@ -58,14 +58,14 @@ export default function Leader() {
         </div>
         <div className="flex flex-col">
           <h2 className="text-red-500 text-2xl py-4 text-center">Game</h2>
-          <strong className="py-3  rounded border-y-2">Super Mario</strong>
+          <strong className="py-3  rounded border-y-2 bg-cyan-200  animate-pulse">Super Mario</strong>
           <strong className="py-3">Mortal Kombat</strong>
           <strong className="py-3">Super Mario</strong>
           <strong className="py-3">Yoshi Island</strong>
         </div>
         <div className="flex flex-col">
           <h2 className="text-red-500 text-2xl py-4 text-center">Time</h2>
-          <strong className="py-3  rounded border-y-2">0h 4m 23s</strong>
+          <strong className="py-3  rounded border-y-2 bg-cyan-200 animate-pulse">0h 4m 23s</strong>
           <strong className="py-3">3h 43m 23s</strong>
           <strong className="py-3">2h 32m 12s</strong>
           <strong className="py-3">0h 32m 32s</strong>

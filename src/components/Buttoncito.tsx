@@ -52,7 +52,7 @@ export const Buttoncito = () => {
                 );
               }
               return (
-                <div style={{ display: "flex", gap: 12 }}>
+                <div className="items-center pt-3 flex justify-center text-xl text-cyan-300 px-4" style={{ display: "flex", gap: 12 }}>
                   <button
                     onClick={openChainModal}
                     style={{ display: "flex", alignItems: "center" }}
@@ -73,18 +73,15 @@ export const Buttoncito = () => {
                           <img
                             alt={chain.name ?? "Chain icon"}
                             src={chain.iconUrl}
-                            style={{ width: 12, height: 12 }}
+                            style={{ width: 12, height: 12, }}
                           />
                         )}
                       </div>
                     )}
-                    {chain.name}
                   </button>
                   <button onClick={openAccountModal} type="button">
                     {account.displayName}
-                    {account.displayBalance
-                      ? ` (${account.displayBalance})`
-                      : ""}
+                 
                   </button>
                 </div>
               );

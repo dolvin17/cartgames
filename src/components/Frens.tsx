@@ -9,7 +9,7 @@ export default function Frens() {
         <Image src="/asset_star.svg" alt="" width={50} height={50} />
       </div>
       <div className="bg-lime-500 text-black items-center gap-8 p-32 flex flex-row">
-		<button className="flex flex-row items-center justify-center rounded-xl border-2 p-2">
+		<button className="flex flex-row bg-cyan-200   rounded-xl hover-borde items-center justify-center  b p-2">
 			<Image src="/asset_plus.svg" alt="" width={50} height={50} />
 			Add new friend
 		</button>
