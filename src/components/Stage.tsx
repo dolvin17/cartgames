@@ -11,9 +11,8 @@ import asset_jossy from "../../public/asset_jossy.png";
 export default function Stage() {
   return (
     <>
-      <div className="top-0 left-0 w-full h-full  z-10">
-      <div className="z-20 top-40 left-60 absolute flex flex-row gap-4 overflow-x-auto">
-        <div className="  h-400px] w-[400px] hover-borde">
+      <div className="z-20 [&_div]:shrink-0 pb-52 top-40 left-0 scroll-smooth right-0 absolute flex flex-row gap-4 overflow-x-auto">
+        <div className=" shrink-0  h-400px] w-[400px] hover-borde">
           <Image src={asset_mk} alt="" placeholder="blur" />
         </div>
         <div className="  h-400px] w-[400px]   hover-borde ">
@@ -35,7 +34,6 @@ export default function Stage() {
           <Image src={asset_jossy} alt="" placeholder="blur" />
         </div>
       </div>
-	  </div>
     </>
   );
 }
