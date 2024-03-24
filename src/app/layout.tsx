@@ -10,6 +10,8 @@ import { WagmiProvider } from "wagmi"
 import { sepolia } from "wagmi/chains"
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
 
+import { Toaster } from "react-hot-toast"
+
 const config = getDefaultConfig({
   appName: "cartbit",
   projectId: "f5dc276367eb7e124550036ec4aab6df",
@@ -34,6 +36,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Script src="/n64wasm.js" />
+      <Toaster
+        containerClassName="mt-2.5"
+        toastOptions={{
+          className: "!rounded-xl !shadow-lg !px-3 !font-sans",
+        }}
+      />
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider>
