@@ -15,7 +15,7 @@ export default function TestPage() {
           const file = (e.target as HTMLInputElement).files?.[0]
           if (file) {
             const rom = await file.arrayBuffer()
-            getInstance().LoadEmulator(new Uint8Array(rom))
+            getInstance().play(file.name, new Uint8Array(rom))
           }
         }}
       />
