@@ -35,7 +35,17 @@ export default function PlayPage({
 
   return (
     <div className="relative cursor-pointer w-screen h-screen">
-      {isPlaying || (
+      {isPlaying ? (
+        <div className="absolute bg-black/5 py-4 px-5 rounded-3xl mt-2 ml-2 hover:bg-black/90 top-0 left-0 z-20 opacity-15 hover:opacity-25">
+          <strong className="text-white text-sm">CONTROLS</strong>
+          <ul className="text-white text-xs mt-2">
+            <li>A,S</li>
+            <li>Z,X,C</li>
+            <li>I,J,K,L</li>
+            <li>Arrow Keys</li>
+          </ul>
+        </div>
+      ) : (
         <div
           onClick={handlePlayGame}
           className="bg-black/50 backdrop-blur-sm absolute inset-0 z-20 grid place-items-center"
