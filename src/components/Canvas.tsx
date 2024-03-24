@@ -1,3 +1,3 @@
 export default function Canvas({ className = "" }) {
-  return <canvas id="canvas" className={`border border-red-700 ${className}`} />
+  return <canvas tabIndex={-1} id="canvas" className={className} />
 }

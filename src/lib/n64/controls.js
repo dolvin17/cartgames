@@ -208,12 +208,9 @@ export class InputController {
   }
 
   update() {
-    this.processGamepad()
-
     //a hack - need to refactor
     if (this.Remap_Check) {
       if (this.Key_Last != "") {
-        this.app.remapPressed()
         this.Remap_Check = false
       }
     }

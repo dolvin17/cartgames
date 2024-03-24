@@ -1,8 +1,12 @@
-import { ROM_LIST, SETTINGS } from "./constants"
 import { InputController } from "./controls"
-const AUDIOBUFFSIZE = 1024
+const AUDIOBUFFSIZE = 2048
 
 export class N64 {
+  moduleInitialized = false
+  onInit = () => {
+    console.debug("default")
+  }
+
   constructor() {
     this.rom_name = ""
     this.audioInited = false
@@ -12,48 +16,23 @@ export class N64 {
       onRuntimeInitialized: this.initModule,
       canvas: document.getElementById("canvas"),
     }
-    window["Module"] = Module
+
+    if (window["Module"]) {
+      Object.assign(window["Module"], Module)
+    } else {
+      window["Module"] = Module
+    }
 
     this.rivetsData = {
       beforeEmulatorStarted: true,
       moduleInitializing: true,
       audioSkipCount: 0,
       inputController: null,
-      remappings: null,
-      remapMode: "",
       currKey: 0,
       remappingPlayer1: false,
-      hasRoms: false,
       romList: [],
       inputLoopStarted: false,
-      noLocalSave: true,
-      lblError: "",
-      chkAdvanced: false,
-      doubleSpeed: false,
-      showDoubleSpeed: false,
-      swapSticks: false,
-      mouseMode: false,
-      useZasCMobile: false,
-      showFPS: true,
-      disableAudioSync: true,
-      hadNipple: false,
       hadFullscreen: false,
-      forceAngry: false,
-      cheats: [],
-      settings: {
-        CLOUDSAVEURL: "",
-        SHOWADVANCED: false,
-        SHOWOPTIONS: false,
-      },
-    }
-
-    this.rivetsData.settings = SETTINGS
-
-    if (ROM_LIST.length > 0) {
-      this.rivetsData.hasRoms = true
-      ROM_LIST.forEach((rom) => {
-        this.rivetsData.romList.push(rom)
-      })
     }
   }
 
@@ -76,10 +55,13 @@ export class N64 {
     }
   }
 
+  play = (name = "", data) => {
+    this.rom_name = name
+    this.LoadEmulator(data)
+  }
+
   LoadEmulator = async (byteArray) => {
     if (this.rom_name.toLocaleLowerCase().endsWith(".zip")) {
-      this.rivetsData.lblError =
-        "Zip format not supported. Please uncompress first."
       this.rivetsData.beforeEmulatorStarted = false
     } else {
       await this.writeAssets()
@@ -87,7 +69,7 @@ export class N64 {
       this.beforeRun()
       this.WriteConfigFile()
       this.initAudio() //need to initAudio before next call for iOS to work
-      await this.LoadSram()
+      // await this.LoadSram()
       console.debug({ Module })
       Module.callMain(["custom.v64"])
       this.rivetsData.beforeEmulatorStarted = false
@@ -101,17 +83,10 @@ export class N64 {
   }
 
   writeAssets = async () => {
-    let file = "assets.zip"
-    let responseText = await this.downloadFile(file)
+    const file = "assets.zip"
+    let responseText = await this.downloadFile(`/${file}`)
     console.log(file, responseText.length)
-    FS.writeFile(
-      file, // file name
-      responseText
-    )
-  }
-
-  reset = () => {
-    Module._neil_reset()
+    FS.writeFile(file, responseText)
   }
 
   downloadFile = async (url) => {
@@ -205,29 +180,11 @@ export class N64 {
 
     this.audioThreadLock = true
 
-    var sampleRate = audioProcessingEvent.outputBuffer.sampleRate
     let outputBuffer = audioProcessingEvent.outputBuffer
     let outputData1 = outputBuffer.getChannelData(0)
     let outputData2 = outputBuffer.getChannelData(1)
 
-    if (this.rivetsData.disableAudioSync) {
-      this.audioWritePosition = Module._neilGetAudioWritePosition()
-    } else {
-      Module._runMainLoop()
-
-      this.audioWritePosition = Module._neilGetAudioWritePosition()
-
-      if (!this.hasEnoughSamples()) {
-        Module._runMainLoop()
-      }
-
-      this.audioWritePosition = Module._neilGetAudioWritePosition()
-    }
-
-    // if (!this.hasEnoughSamples())
-    //     console.log('not enough samples');
-
-    // console.log('Write: ' + this.audioWritePosition + ' Read: ' + this.audioReadPosition);
+    this.audioWritePosition = Module._neilGetAudioWritePosition()
 
     let hadSkip = false
 
@@ -332,26 +289,18 @@ export class N64 {
       this.rivetsData.inputController.KeyMappings.Mapping_Action_Analog_Right +
       "\r\n"
 
-    //load save files
     configString += "0\r\n".repeat(3)
 
     //show FPS
-    if (this.rivetsData.showFPS) configString += "1" + "\r\n"
-    else configString += "0" + "\r\n"
+    configString += "0" + "\r\n"
 
     //swap sticks
-    if (this.rivetsData.swapSticks) configString += "1" + "\r\n"
-    else configString += "0" + "\r\n"
+    configString += "0" + "\r\n"
 
     //disable audio sync
-    if (this.rivetsData.disableAudioSync) configString += "1" + "\r\n"
-    else configString += "0" + "\r\n"
+    configString += "1" + "\r\n"
 
-    //invert player Y axis - off
-    configString += "0\r\n".repeat(3)
-
-    // mobile mode off
-    configString += "0\r\n".repeat(4)
+    configString += "0\r\n".repeat(7)
 
     FS.writeFile("config.txt", configString)
 
@@ -361,26 +310,12 @@ export class N64 {
     }
   }
 
-  uploadRom = (event) => {
-    const app = this
-    var file = event.currentTarget.files[0]
-    this.rom_name = file.name
-    console.log(file)
-    var reader = new FileReader()
-    reader.onprogress = function (e) {
-      console.log("loaded: " + e.loaded)
-    }
-    reader.onload = function (e) {
-      console.log("finished loading")
-      var byteArray = new Uint8Array(this.result)
-      app.LoadEmulator(byteArray)
-    }
-    reader.readAsArrayBuffer(file)
-  }
-
   initModule = async () => {
     console.log("module initialized")
+
     this.rivetsData.moduleInitializing = false
+    this.moduleInitialized = true
+    this.onInit()
   }
 
   preventDefaults = (e) => {
@@ -395,54 +330,14 @@ export class N64 {
 
   LoadSram = async () => {
     const app = this
-    return new Promise(function (resolve, reject) {
-      var request = indexedDB.open("N64WASMDB")
-      try {
-        request.onsuccess = function (ev) {
-          var db = ev.target.result
-          var romStore = db
-            .transaction("N64WASMSTATES", "readwrite")
-            .objectStore("N64WASMSTATES")
-          var rom = romStore.get(app.rom_name + ".sram")
-          rom.onsuccess = function (event) {
-            if (rom.result) {
-              let byteArray = rom.result //Uint8Array
-              FS.writeFile("/game.savememory", byteArray)
-            }
-            resolve()
-          }
-          rom.onerror = function (event) {
-            reject()
-          }
-        }
-        request.onerror = function (ev) {
-          reject()
-        }
-      } catch (error) {
-        reject()
-      }
-    })
+    Promise.reject("not implemented yet")
   }
 
   SaveSram = () => {
     const app = this
     let data = FS.readFile("/game.savememory") //this is a Uint8Array
 
-    var request = indexedDB.open("N64WASMDB")
-    request.onsuccess = function (ev) {
-      var db = ev.target.result
-      var romStore = db
-        .transaction("N64WASMSTATES", "readwrite")
-        .objectStore("N64WASMSTATES")
-      var addRequest = romStore.put(data, app.rom_name + ".sram")
-      addRequest.onsuccess = function (event) {
-        console.log("sram added")
-      }
-      addRequest.onerror = function (event) {
-        console.log("error adding sram")
-        console.log(event)
-      }
-    }
+    Promise.reject("not implemented yet")
   }
 
   //when it returns from emscripten
@@ -468,54 +363,6 @@ export class N64 {
     } catch (error) {
       console.log("full screen failed")
     }
-  }
-
-  remapPressed = () => {
-    if (this.rivetsData.remapMode == "Key") {
-      var keyLast = this.rivetsData.inputController.Key_Last
-
-      //player 1
-      if (this.rivetsData.currKey == 1)
-        this.rivetsData.remappings.Mapping_Up = keyLast
-      if (this.rivetsData.currKey == 2)
-        this.rivetsData.remappings.Mapping_Down = keyLast
-      if (this.rivetsData.currKey == 3)
-        this.rivetsData.remappings.Mapping_Left = keyLast
-      if (this.rivetsData.currKey == 4)
-        this.rivetsData.remappings.Mapping_Right = keyLast
-      if (this.rivetsData.currKey == 5)
-        this.rivetsData.remappings.Mapping_Action_A = keyLast
-      if (this.rivetsData.currKey == 6)
-        this.rivetsData.remappings.Mapping_Action_B = keyLast
-      if (this.rivetsData.currKey == 8)
-        this.rivetsData.remappings.Mapping_Action_Start = keyLast
-      if (this.rivetsData.currKey == 9)
-        this.rivetsData.remappings.Mapping_Menu = keyLast
-      if (this.rivetsData.currKey == 10)
-        this.rivetsData.remappings.Mapping_Action_Z = keyLast
-      if (this.rivetsData.currKey == 11)
-        this.rivetsData.remappings.Mapping_Action_L = keyLast
-      if (this.rivetsData.currKey == 12)
-        this.rivetsData.remappings.Mapping_Action_R = keyLast
-      if (this.rivetsData.currKey == 13)
-        this.rivetsData.remappings.Mapping_Action_CUP = keyLast
-      if (this.rivetsData.currKey == 14)
-        this.rivetsData.remappings.Mapping_Action_CDOWN = keyLast
-      if (this.rivetsData.currKey == 15)
-        this.rivetsData.remappings.Mapping_Action_CLEFT = keyLast
-      if (this.rivetsData.currKey == 16)
-        this.rivetsData.remappings.Mapping_Action_CRIGHT = keyLast
-      if (this.rivetsData.currKey == 17)
-        this.rivetsData.remappings.Mapping_Action_Analog_Up = keyLast
-      if (this.rivetsData.currKey == 18)
-        this.rivetsData.remappings.Mapping_Action_Analog_Down = keyLast
-      if (this.rivetsData.currKey == 19)
-        this.rivetsData.remappings.Mapping_Action_Analog_Left = keyLast
-      if (this.rivetsData.currKey == 20)
-        this.rivetsData.remappings.Mapping_Action_Analog_Right = keyLast
-    }
-
-    this.rivetsData.remapWait = false
   }
 
   localCallback = () => {}

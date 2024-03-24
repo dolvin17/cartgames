@@ -33,13 +33,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Script src="/n64wasm.js" />
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider>
-            <body className={press.className}>
-              <Script src="/n64wasm.js" />
-              {children}
-            </body>
+            <body className={press.className}>{children}</body>
           </RainbowKitProvider>
         </QueryClientProvider>
       </WagmiProvider>
