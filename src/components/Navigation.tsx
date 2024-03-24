@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 export default function Navigation() {
 	  return (
-	<nav className="bg-red-600 flex items-center justify-between">
+	<nav className="bg-red-700 flex items-center justify-between">
 		<div className='m-2' >
 
 	 <Image src="/asset_logo.svg" alt="" width={150} height={150} />
