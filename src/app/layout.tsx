@@ -7,7 +7,7 @@ import Script from "next/script"
 import { Press_Start_2P } from "next/font/google"
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit"
 import { WagmiProvider } from "wagmi"
-import { sepolia } from "wagmi/chains"
+import { hardhat, sepolia } from "wagmi/chains"
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
 
 import { Toaster } from "react-hot-toast"
@@ -15,7 +15,7 @@ import { Toaster } from "react-hot-toast"
 const config = getDefaultConfig({
   appName: "cartbit",
   projectId: "f5dc276367eb7e124550036ec4aab6df",
-  chains: [sepolia],
+  chains: [hardhat, sepolia],
   ssr: true, // If your dApp uses server side rendering (SSR)
 })
 
